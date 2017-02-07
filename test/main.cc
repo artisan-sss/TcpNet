@@ -4,7 +4,6 @@
 /*
  * clang++ version 3.5.0+
  */
-
 #include "../base_template/singleton.h"
 #include "../base_class/noncopyable.h"
 #include "../thread_safety/mutex_lock.h"
@@ -42,11 +41,15 @@ void test_singleton_template(void)
 }
 
 #include <cstdlib>
+#include <vector>
+#include <stdlib.h>
+
 #include "../sort_algorithm/quick_sort.h"
 
 void test_quit_sort(int count)
 {
-    std::vector<int> data(count);
+    //std::vector<int> data(count);
+    int* data = new int[count];
     srand((unsigned)time(NULL));
     for (int i = 0; i < count; ++i)
     {
@@ -55,16 +58,15 @@ void test_quit_sort(int count)
     }
     printf("\n");
 
-    sort_algorithm::quick_sort(data, 0, data.size());
-    for (int i = 0; i < data.size(); ++i)
+    //sort_algorithm::quick_sort(data.begin(), data.end());
+    sort_algorithm::quick_sort(&data[0], &data[count-1] + 1);
+    for (int i = 0; i < count; ++i)
     {
         printf("%d ", data[i]);
     }
     printf("\n");
 }
 
-#include <algorithm>
-#include <iostream>
 int main()
 {
     printf("main function first code line!!!\n");

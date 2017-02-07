@@ -10,40 +10,43 @@
 #ifndef __SORT_ALGORITHM_QUICK_SORT_H__
 #define __SORT_ALGORITHM_QUICK_SORT_H__
 
-#include <vector>
+#include <algorithm>
 
 namespace sort_algorithm
 {
 
-template <typename T>
-int partition(std::vector<T>& data, int start, int end)
+template <typename BidirIter, typename UnaryPredicate>
+BidirIter partition(BidirIter first, BidirIter last, UnaryPredicate pred)
 {
-    int index = start - 1;
-    for (int i = start; i < end; ++i)
+    BidirIter middle = first;
+    BidirIter key = last-1;
+    while (first < last)
     {
-        if (data[i] >= data[end])
+        if (pred(first))
         {
-            continue;
+            std::swap(*middle, *first);
+            ++middle;
         }
 
-        std::swap(data[++index], data[i]);
+        ++first;
     }
 
-    std::swap(data[++index], data[end]);
-    return index;
+    std::swap(*middle, *--last);
+    return middle;
 }
 
-template <typename T>
-void quick_sort(std::vector<T>& data, int start, int end)
+template <typename BidirIter>
+void quick_sort(BidirIter first, BidirIter last)
 {
-    if (start >= end)
+    if (first == last)
     {
         return;
     }
 
-    int index = partition(data, start, end);
-    quick_sort(data, start, index-1);
-    quick_sort(data, index+1, end);
+    auto key = *(last-1);
+    BidirIter middle = sort_algorithm::partition(first, last, [key](BidirIter first){return *first < key;});
+    quick_sort(first, middle);
+    quick_sort(++middle, last);
 }
 
 }
