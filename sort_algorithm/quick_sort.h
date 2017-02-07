@@ -29,7 +29,7 @@ int partition(std::vector<T>& data, int start, int end)
         std::swap(data[++index], data[i]);
     }
 
-    swap(data[++index], data[end]);
+    std::swap(data[++index], data[end]);
     return index;
 }
 
