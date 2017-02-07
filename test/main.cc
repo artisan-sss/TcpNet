@@ -1,9 +1,15 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include "../base_template/singleton.h"
+/*
+ * clang++ version 3.5.0+
+ */
 
-class SingletonTest
+#include "../base_template/singleton.h"
+#include "../base_class/noncopyable.h"
+#include "../thread_safety/mutex_lock.h"
+
+class SingletonTest : public base_class::noncopyable
 {
 public:
     SingletonTest(void)
@@ -21,8 +27,8 @@ public:
         printf("hello, this is SingletonTest!!!\n");
     }
 private:
-    SingletonTest(SingletonTest&);
-    SingletonTest& operator=(SingletonTest&);
+    //SingletonTest(SingletonTest&);
+    //SingletonTest& operator=(SingletonTest&);
 
 }; // end of Class Singleton
 
@@ -35,11 +41,42 @@ void test_singleton_template(void)
     }
 }
 
+#include <cstdlib>
+#include "../sort_algorithm/quick_sort.h"
 
+void test_quit_sort(int count)
+{
+    std::vector<int> data(count);
+    srand((unsigned)time(NULL));
+    for (int i = 0; i < count; ++i)
+    {
+        data[i] = rand()%1000;
+        printf("%d ", data[i]);
+    }
+    printf("\n");
+
+    sort_algorithm::quick_sort(data, 0, data.size());
+    for (int i = 0; i < data.size(); ++i)
+    {
+        printf("%d ", data[i]);
+    }
+    printf("\n");
+}
+
+#include <algorithm>
+#include <iostream>
 int main()
 {
+    printf("main function first code line!!!\n");
+
+    thread_safety::MutexLock mutex_lock;
+    thread_safety::AutoMutexLock guard(mutex_lock);
+
     test_singleton_template();
 
+    test_quit_sort(10);
+
+    printf("main function before return code line!!!\n");
     return 1;
 }
 
