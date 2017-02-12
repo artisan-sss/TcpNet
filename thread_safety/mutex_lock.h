@@ -3,7 +3,7 @@
 * @Version: 1.0
 * @Created: 2017-02-05 14:13
 * @Author: u203,cplusu203@gmail.com
-* @Description: Mutex Encapsulation
+* @Description: mutex encapsulation
 *
 * @History: 
 ***************************************************************************************************/
@@ -34,6 +34,11 @@ public:
     pid_t get_mutex_holder(void) const
     {
         return mutex_holder;
+    }
+
+    pthread_mutex_t* get_pthread_mutex(void)
+    {
+        return &mutex;
     }
 
     void lock(pid_t _mutex_holder = 0)
