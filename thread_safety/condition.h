@@ -11,48 +11,53 @@
 #define __THREAD_SAFETY_CONDITION_H__
 
 #include "mutex_lock.h"
+#include <cerrno>
 
 namespace thread_safety
 {
 
-class Condition : public base_clas::noncopyable
+class Condition : public base_class::noncopyable
 {
 public:
     explicit Condition(MutexLock& _mutex_lock)
         : mutex_lock(_mutex_lock)
     {
-        pthread_cont_init(&condition, NULL);
+        pthread_cond_init(&condition, NULL);
     }
 
     ~Condition(void)
     {
-        pthread_cont_destroy(&condition);
+        pthread_cond_destroy(&condition);
     }
 
     void wait(void)
     {
-    
+        pthread_cond_wait(&condition, mutex_lock.get_pthread_mutex());
     }
 
     bool time_wait(int seconds)
     {
-    
+        struct timespec absolute_time;
+        clock_gettime(CLOCK_REALTIME, &absolute_time);
+        absolute_time.tv_sec += seconds;
+        return ETIMEDOUT == 
+            pthread_cond_timedwait(&condition, mutex_lock.get_pthread_mutex(), &absolute_time);
     }
 
     void notify(void)
     {
-    
+        pthread_cond_signal(&condition);
     }
 
     void notify_all(void)
     {
-    
+        pthread_cond_broadcast(&condition);
     }
 protected:
 
 private:
     MutexLock& mutex_lock;
-    pthread_cont_t condition;
+    pthread_cond_t condition;
 
 }; // end of class Condition
 
